@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ project_name }}</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Outfit", "sans-serif"],
+            },
+            colors: {
+              primary: "#6366f1",
+              secondary: "#a855f7",
+              dark: "#0f172a",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body
+    class="bg-gray-900 text-white min-h-screen relative overflow-hidden selection:bg-primary selection:text-white"
+  >
+    <!-- Ambient Background -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+      <div
+        class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-pulse"
+      ></div>
+      <div
+        class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[120px] animate-pulse"
+        style="animation-delay: 2s"
+      ></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-4 h-screen flex flex-col">
+      <!-- Header -->
+      <header
+        class="flex justify-between items-center mb-4 glass px-6 py-3 rounded-2xl"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center shadow-lg"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"
+              />
+            </svg>
+          </div>
+          <h1
+            class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400"
+          >
+            {{ project_name }}
+          </h1>
+        </div>
+        
+        <!-- Header Controls -->
+        <div class="flex items-center gap-3">
+          <!-- Mode Toggle Button -->
+          <button
+            id="modeToggle"
+            class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black text-sm font-bold rounded-lg transition-all shadow-md flex items-center gap-2"
+          >
+            <span id="modeIcon">✏️</span>
+            <span id="modeText">SPELLING</span>
+          </button>
+          
+          <!-- Start/Stop Camera -->
+          <button
+            id="startButton"
+            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition-all shadow-md flex items-center gap-2"
+          >
+            Start Camera
+          </button>
+          
+          <!-- Status Indicator -->
+          <div
+            id="statusContainer"
+            class="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 border border-green-500/30"
+          >
+            <span id="statusDot" class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span id="statusText" class="text-sm font-medium text-green-400">LISTENING</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Grid -->
+      <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-0">
+        <!-- Video Section (Left - Larger) -->
+        <div class="lg:col-span-8 relative flex flex-col">
+          <div
+            class="flex-1 relative rounded-2xl overflow-hidden glass-card shadow-2xl border border-white/10 group"
+          >
+            <!-- Video Element -->
+            <video
+              id="webcam"
+              class="w-full h-full object-cover"
+              autoplay
+              playsinline
+              muted
+            ></video>
+            
+            <!-- Canvas Overlay for Landmarks -->
+            <canvas
+              id="landmarkCanvas"
+              class="absolute top-0 left-0 w-full h-full pointer-events-none"
+            ></canvas>
+
+            <!-- Live Indicator -->
+            <div
+              class="absolute top-4 left-4 px-3 py-1 bg-red-500/80 backdrop-blur-md rounded-full text-xs font-bold text-white flex items-center gap-2 shadow-lg"
+            >
+              <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+              LIVE
+            </div>
+            
+            <!-- Traffic Light Confidence (Top Right) -->
+            <div id="trafficLight" class="absolute top-4 right-4 flex items-center gap-3">
+              <span id="trafficLabel" class="text-sm font-bold text-white"></span>
+              <div id="trafficCircle" class="w-10 h-10 rounded-full border-4 border-gray-600 flex items-center justify-center">
+                <span id="trafficInner" class="w-6 h-6 rounded-full bg-gray-600"></span>
+              </div>
+            </div>
+            
+            <!-- Progress Bar (Reading) -->
+            <div id="progressContainer" class="absolute top-16 right-4 hidden">
+              <div class="bg-gray-800/80 backdrop-blur-sm rounded-lg p-2">
+                <span id="progressLabel" class="text-xs text-yellow-400">Reading...</span>
+                <div class="w-40 h-2 bg-gray-700 rounded-full mt-1">
+                  <div id="progressBar" class="h-full bg-yellow-400 rounded-full transition-all duration-100" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Response Panel (Bottom overlay) -->
+            <div id="responsePanel" class="absolute bottom-20 left-4 right-4 hidden">
+              <div class="bg-indigo-900/90 backdrop-blur-sm rounded-xl p-4 border border-indigo-500/30">
+                <p id="responseText" class="text-cyan-300 text-sm"></p>
+              </div>
+            </div>
+
+            <!-- USER SAYS Panel (Bottom) -->
+            <div class="absolute bottom-0 left-0 right-0 bg-gray-900/90 backdrop-blur-sm p-4">
+              <span class="text-xs text-gray-400 uppercase tracking-wide">User Says:</span>
+              <p id="userSays" class="text-2xl font-bold text-white mt-1">...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Section (Right) -->
+        <div class="lg:col-span-4 flex flex-col gap-4 overflow-hidden">
+          <!-- Prediction Card -->
+          <div
+            class="glass-card rounded-2xl p-4 flex flex-col items-center justify-center text-center relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-50"
+            ></div>
+
+            <h2
+              class="text-gray-400 text-xs font-medium uppercase tracking-widest mb-2"
+            >
+              Detected Gesture
+            </h2>
+
+            <div class="relative w-28 h-28 flex items-center justify-center">
+              <div
+                class="absolute w-full h-full bg-primary/20 rounded-full animate-ping opacity-20"
+              ></div>
+              <h1
+                id="prediction"
+                class="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 relative z-10"
+              >
+                -
+              </h1>
+            </div>
+
+            <div class="mt-2 flex flex-col items-center gap-1">
+              <span class="text-gray-400 text-xs uppercase tracking-wide">Confidence</span>
+              <div class="text-xl font-bold text-white" id="confidence">0%</div>
+            </div>
+          </div>
+
+          <!-- Controls Card -->
+          <div class="glass-card rounded-2xl p-4">
+            <h3 class="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+              <span>⌨️</span> Controls
+            </h3>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="bg-gray-800/50 rounded-lg p-2 text-center">
+                <kbd class="bg-gray-700 px-2 py-1 rounded">TAB</kbd>
+                <span class="block mt-1 text-gray-400">Toggle Mode</span>
+              </div>
+              <div class="bg-gray-800/50 rounded-lg p-2 text-center">
+                <kbd class="bg-gray-700 px-2 py-1 rounded">SPACE</kbd>
+                <span class="block mt-1 text-gray-400">Commit</span>
+              </div>
+              <div class="bg-gray-800/50 rounded-lg p-2 text-center">
+                <kbd class="bg-gray-700 px-2 py-1 rounded">ENTER</kbd>
+                <span class="block mt-1 text-gray-400">AI Chat</span>
+              </div>
+              <div class="bg-gray-800/50 rounded-lg p-2 text-center">
+                <kbd class="bg-gray-700 px-2 py-1 rounded">8</kbd>
+                <span class="block mt-1 text-gray-400">Local Brain</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Spelling & Sentence Card -->
+          <div class="glass-card rounded-2xl p-4 flex-1 flex flex-col">
+            <h3 class="text-sm font-semibold text-white mb-2 flex items-center gap-2">
+              💬 Communication
+            </h3>
+            
+            <div class="space-y-3 flex-1">
+              <!-- Current Spelling -->
+              <div>
+                <span class="text-gray-400 text-xs uppercase tracking-wide">Spelling</span>
+                <div id="spelledWord" class="text-xl font-bold text-yellow-300 min-h-[1.75rem]">-</div>
+              </div>
+              
+              <!-- Built Sentence -->
+              <div>
+                <span class="text-gray-400 text-xs uppercase tracking-wide">Sentence</span>
+                <div id="sentence" class="text-base font-medium text-white min-h-[1.75rem] border-b border-white/10 pb-2"></div>
+              </div>
+              
+              <!-- Auto-commit Timer -->
+              <div id="autoCommitContainer" class="hidden">
+                <span class="text-gray-400 text-xs uppercase tracking-wide">Auto-send in</span>
+                <div id="autoCommitTimer" class="text-lg font-bold text-yellow-400">--s</div>
+              </div>
+
+              <!-- Controls -->
+              <div class="flex gap-2 pt-2">
+                <button id="finishBtn" class="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 rounded-lg transition-colors">
+                  AI Chat
+                </button>
+                <button id="localBrainBtn" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-3 rounded-lg transition-colors">
+                  🧠
+                </button>
+                <button id="clearBtn" class="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-3 rounded-lg transition-colors">
+                  🗑️
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Committed Log Card -->
+          <div class="glass-card rounded-2xl p-4 max-h-40 overflow-hidden">
+            <h3 class="text-sm font-semibold text-white mb-2 flex items-center gap-2">
+              📋 Log
+            </h3>
+            <div id="committedLog" class="text-xs font-mono text-green-400 space-y-1 overflow-y-auto max-h-24 scrollbar-hide">
+              <div class="text-gray-500">Waiting for input...</div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="mt-4 text-center text-gray-500 text-xs">
+        <p>
+          &copy; 2025 Sign Language Detection System. Powered by FastAPI &
+          TensorFlow.
+        </p>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/main.js"></script>
+  </body>
+</html>

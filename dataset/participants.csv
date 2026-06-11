@@ -1,0 +1,12 @@
+participant_id,session_id,age,gender,dominant_hand,notes,date
+001,session_001,43,Perempuan,Kanan,Perempuan,2025-11-28 18:41:26
+001,session_002,43,Perempuan,Kanan,Perempuan,2025-11-28 18:55:33
+001,session_003,43,Perempuan,Kanan,Perempuan,2025-11-29 10:42:35
+002,session_001,22,Laki-laki,Kanan,Dervio Rahmatdianto,2025-12-02 11:47:37
+003,session_001,21,Perempuan,Kanan,Aisyah Fadri,2025-12-03 17:04:47
+004,session_001,22,Perempuan,Kanan,Nengsi Syaputri,2025-12-04 14:54:49
+005,session_001,22,Perempuan,Kanan,Dhea Nesvira,2025-12-05 13:08:28
+002,session_002,22,Laki-laki,Kanan,Dervio Rahmatdianto,2025-12-08 14:35:31
+006,session_001,18,Perempuan,Kanan,Lutfia Nayla,2025-12-12 15:02:07
+002,session_003,22,Laki-laki,Kanan,Dervio Rahmatdianto,2025-12-26 15:24:55
+008,session_001,21,Laki-laki,Kiri,dervio,2026-05-19 09:23:18

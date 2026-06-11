@@ -1,0 +1,157 @@
+/* Custom Glassmorphism Utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
+  }
+}
+
+.glow-effect {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Video mirror effect - same as desktop selfie view
+   Backend flips frame for model processing.
+   CSS also flips for user display (selfie/mirror mode).
+   These are independent - backend flip is for model, CSS flip is for UX. */
+video {
+  transform: scaleX(-1);
+}
+
+/* Canvas should also be flipped to match video display */
+#landmarkCanvas {
+  transform: scaleX(-1);
+}
+
+/* Scrollbar hide */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Traffic light animation */
+@keyframes traffic-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+#trafficInner.bg-green-500,
+#trafficInner.bg-yellow-500 {
+  animation: traffic-pulse 0.5s ease-in-out;
+}
+
+/* Progress bar animation */
+#progressBar {
+  transition: width 0.1s linear;
+}
+
+/* Prediction scale animation */
+#prediction {
+  transition: transform 0.1s ease-out;
+}
+
+#prediction.scale-110 {
+  transform: scale(1.1);
+}
+
+/* Committed log styling */
+#committedLog div {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Mode toggle animation */
+#modeToggle {
+  transition: all 0.2s ease;
+}
+
+#modeToggle:active {
+  transform: scale(0.95);
+}
+
+/* Status indicator animation */
+#statusDot {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Response panel slide in */
+#responsePanel {
+  transition: all 0.3s ease;
+}
+
+/* Keyboard hint styling */
+kbd {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 2px 6px;
+  background: rgba(55, 65, 81, 0.8);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* User Says panel */
+#userSays {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Auto-commit timer warning */
+#autoCommitTimer.text-red-400 {
+  animation: blink 0.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Button disabled state */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Traffic label */
+#trafficLabel {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}

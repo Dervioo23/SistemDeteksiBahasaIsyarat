@@ -1,0 +1,130 @@
+{
+  "project_name": "Sign Language Detection System",
+  "version": "1.0.0",
+  "author": "Dervio",
+  "dataset": {
+    "root_dir": "dataset",
+    "words_dir": "dataset/words",
+    "alphabet_dir": "dataset/alphabet",
+    "participants_csv": "dataset/participants.csv",
+    "manifest_csv": "dataset/manifest.csv",
+    "preprocessed_root": "preprocessed_data",
+    "preprocessed_words_dir": "preprocessed_data/words",
+    "preprocessed_alphabet_dir": "preprocessed_data/alphabet"
+  },
+  "collection": {
+    "fps": 30,
+    "resolution": [
+      1280,
+      720
+    ],
+    "sequence_length_word": 45,
+    "sequence_length_alphabet": 1,
+    "countdown_seconds": 3,
+    "samples_per_gesture": 15,
+    "min_detection_confidence": 0.6,
+    "min_tracking_confidence": 0.5
+  },
+  "model": {
+    "word_model_path": "trained_models/word_halo_model_best.keras",
+    "alphabet_model_path": "trained_models/multiclass_alphabet_model_final.keras",
+    "multiclass_word_model_path": "trained_models/multiclass_word_model_final.keras",
+    "multiclass_word_anti_overfit_path": "trained_models/multiclass_word_anti_overfit_final.keras",
+    "multiclass_alphabet_model_path": "trained_models/multiclass_alphabet_model_final.keras",
+    "trained_models_dir": "trained_models",
+    "word_label_encoder_path": "trained_models/word_label_encoder.pkl",
+    "alphabet_label_encoder_path": "trained_models/alphabet_label_encoder.pkl",
+    "confidence_threshold_word": 0.7,
+    "confidence_threshold_alphabet": 0.4,
+    "word_input_shape": [
+      45,
+      126
+    ],
+    "alphabet_input_shape": [
+      126
+    ],
+    "num_hands": 2,
+    "features_per_hand": 63,
+    "total_features": 126,
+    "epochs": 100,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "validation_split": 0.2
+  },
+  "inference": {
+    "target_fps": 25,
+    "max_latency_ms": 800,
+    "end_of_word_threshold": 0.5,
+    "end_of_word_frames": 15,
+    "buffer_size": 45
+  },
+  "tts": {
+    "engine": "pyttsx3",
+    "language": "id",
+    "rate": 150,
+    "volume": 0.9,
+    "voice_id": 0,
+    "elevenlabs_voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "elevenlabs_model": "eleven_multilingual_v2"
+  },
+  "vocabulary": {
+    "words": [
+      "halo",
+      "terimakasih",
+      "namasaya",
+      "apakabar",
+      "selamatpagi",
+      "dervio"
+    ],
+    "alphabet": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z"
+    ]
+  },
+  "responses": {
+    "halo": "Halo Juga Dervio, Ada yang bisa saya bantu hari ini?",
+    "hello": "Halo Juga",
+    "hallo": "Halo Juga",
+    "apa kabar": "Kabar baik, terima kasih!",
+    "terimakasih": "Sama-sama!",
+    "siapa namamu": "Saya adalah asisten bahasa isyarat.",
+    "default": "Maaf, saya belum mengerti kata itu."
+  },
+  "ui": {
+    "window_title": "Sign Language Detection System",
+    "window_width": 1400,
+    "window_height": 900,
+    "camera_width": 960,
+    "camera_height": 720,
+    "theme": "dark"
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file": "logs/app.log"
+  }
+}
